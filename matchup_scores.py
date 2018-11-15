@@ -11,11 +11,12 @@ def get_matchup_score():
     reprompt_text = ""
     should_end_session = False
 
-    # request = urllib.request.Request()
-    result = urllib.request.urlopen('http://games.espn.com/ffl/api/v2/scoreboard?leagueId='+leagueId+'&seasonId='+ seasonId)
+    #Retreieve matchup data from API
+    result = urllib.request.urlopen('http://games.espn.com/ffl/api/v2/scoreboard?leagueId='+leagueId+'&seasonId=' + seasonId)
     resultBody = result.read()
     data = json.loads(resultBody.decode("utf-8"))
 
+    #Sort out the data into a better format for use by Alexa
     df = []
     for key in data:
         temp = data['scoreboard']['matchups']
@@ -30,9 +31,7 @@ def get_matchup_score():
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
-
-
-
+#Build speech model to send back to Alexa
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
         "outputSpeech": {
