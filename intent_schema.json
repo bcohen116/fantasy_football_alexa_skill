@@ -1,0 +1,160 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "fantasy football",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "get_player_score",
+                    "slots": [
+                        {
+                            "name": "Player",
+                            "type": "AMAZON.Athlete",
+                            "samples": [
+                                "{Player}",
+                                "Drew Brees"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "How many points does {Player} have",
+                        "How is {Player} doing today",
+                        "How is {Player} doing"
+                    ]
+                },
+                {
+                    "name": "check_matchup_score",
+                    "slots": [
+                        {
+                            "name": "Name",
+                            "type": "AMAZON.Actor",
+                            "samples": [
+                                "{Name}",
+                                "Steve Smith"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Check my matchup"
+                    ]
+                },
+                {
+                    "name": "check_matchup_projections",
+                    "slots": [
+                        {
+                            "name": "Name",
+                            "type": "AMAZON.Actor"
+                        }
+                    ],
+                    "samples": [
+                        "What are my projections"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "AMAZON.Athlete",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Drew Brees",
+                                "synonyms": [
+                                    "saints quarterback"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "get_player_score",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Player",
+                            "type": "AMAZON.Athlete",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1033125336485.855025889658"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "check_matchup_score",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Name",
+                            "type": "AMAZON.Actor",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.561326969411.1463370306820",
+                                "elicitation": "Elicit.Slot.561326969411.1463370306820"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1033125336485.855025889658",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please provide a valid player name."
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.561326969411.1463370306820",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You can type your name into the Alexa App if you are having trouble."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your full name?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.561326969411.1463370306820",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Is {Name} correct?"
+                    }
+                ]
+            }
+        ]
+    }
+}

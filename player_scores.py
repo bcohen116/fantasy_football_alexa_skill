@@ -12,12 +12,9 @@ slots = {0: 'QB', 2: 'RB', 4: 'WR', 6: 'TE',
          16: 'D/ST', 17: 'K', 20: 'BE', 23: 'FLEX'}
 
 #Get the fantasy score for a specific player
-def get_player_score(handler_input):
-    #First we need to parse out the request data received from Alexa
-    req_envelope = handler_input.request_envelope
-    playerRequested = req_envelope.intent.slots.Player.value
-
-    session_attributes = {}
+def get_player_score(intent_request):
+    # print(json.dumps(intent_request))
+    playerRequested = intent_request['intent']['slots']['Player']['value']
     card_title = "Player Fantasy Score"
     reprompt_text = ""
     should_end_session = False
@@ -46,13 +43,13 @@ def get_player_score(handler_input):
         data = json.loads(boxScore.decode("utf-8"))
         matchupInfo[match] = data
 
-    #Split the matchups into teams, then parse each player out
     speech_output = ""
     for match in range(len(matchupInfo)):
+        #loop through all of the matchups to retreive a list of all players on active rosters
         homeTeam = matchupInfo[match]['boxscore']['teams'][0]['slots']
         awayTeam = matchupInfo[match]['boxscore']['teams'][1]['slots']
 
-        #loop through each player until we find the right one
+        #Check each player to see if we find the one the user asked for
         for count, player in enumerate(homeTeam):
             resultPlayerSpeechOutput = search_for_player(playerRequested,count,player)
             if resultPlayerSpeechOutput != "":
@@ -60,6 +57,7 @@ def get_player_score(handler_input):
                 speech_output = resultPlayerSpeechOutput
                 break #Found the requested player, stop searching
 
+        #More checking for players
         for count, player in enumerate(awayTeam):
             resultPlayerSpeechOutput = search_for_player(playerRequested,count,player)
             if resultPlayerSpeechOutput != "":
@@ -71,9 +69,10 @@ def get_player_score(handler_input):
         #No Player was found if this is true, tell user the search didn't work
         speech_output = "I searched for %s but did not find anything." % (playerRequested)
 
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+#Methods for parsing out the player data from ESPN
 def search_for_player(playerRequested,count,player):
     try:
         if (playerRequested.casefold() == (player['player']['firstName'] + ' ' + player['player']['lastName']).casefold()):
@@ -94,8 +93,7 @@ def search_for_player(playerRequested,count,player):
         print("No Player Entry Found in JSON")
         return ("")
 
-
-#Build speech model to send back to Alexa
+#Build responses to send back to Alexa
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
         "outputSpeech": {
@@ -116,9 +114,8 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         "shouldEndSession": should_end_session
     }
 
-def build_response(session_attributes, speechlet_response):
+def build_response(speechlet_response):
     return {
         "version": "1.0",
-        "sessionAttributes": session_attributes,
         "response": speechlet_response
     }
