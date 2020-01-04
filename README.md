@@ -15,3 +15,5 @@ lambda_function.py is set up in my lambda console to run upon Alexa skill invoca
 
 
 Due to the Terms of the ESPN API, this app must be free to use. I made this purely for educational and personal use and is not meant to be used commercially.
+
+**As of 1-4-2020 this is offline on the skill store as the app was being maliciously accessed which was causing my free tier account to go over the storage limits.** 
